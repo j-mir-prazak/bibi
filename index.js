@@ -37,14 +37,15 @@ function languageVersion() {
 	date = new Date().getMinutes()
 	if ( ( date >= 0 && date < 15 ) || ( date >= 30 && date < 45 ) ) {
 		console.log(date + " : " +  "first" + " : " + ++count)
-		version = "cz"
+		version = "1"
 
 	}
 	else if ( ( date >= 15 && date < 30 ) || ( date >= 45 ) ) {
 		console.log(date + " : " +  "second" + " : " + ++count)
-		version = "en"
+		version = "2"
 	}
 
+	version = 1
 	return version
 
 }
@@ -63,7 +64,7 @@ function startCycle(version) {
 	var filename = "setkani." + version + ".mkv"
 	console.log(filename)
 
-	cycle["player"] = omx("./assets/" + filename, 'alsa')
+	cycle["player"] = omx("/media/pi/MARATHON/assets/" + filename, 'alsa')
 	currentState = "fadeout"
 	for( i in ttys ) {
 		var tty = ttys[i]
