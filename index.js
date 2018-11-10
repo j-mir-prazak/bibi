@@ -68,7 +68,7 @@ function startCycle(version) {
 	currentState = "fadeout"
 	for( i in ttys ) {
 		var tty = ttys[i]
-		pids.push(cycle.player.pid)
+		pids.push(cycle["player"].pid)
 		if( tty["confirmed"] ) {
 			var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:" + fadeOutColor), {detached: true})
 			console.log(tty["tty"] + " was sent 'led:" + fadeOutColor + "'")
