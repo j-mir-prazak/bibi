@@ -130,7 +130,7 @@ var rule = new schedule.RecurrenceRule()
 rule.minute = new Array(0, 15,  30, 45)
 
 var date;
-var clicker = schedule.scheduleJob('* */1 * * * *', function() {
+var clicker = schedule.scheduleJob(rule, function() {
 	console.log('new cycle enqueued')
 	var version = languageVersion()
 	playerQueue.push(function() {
@@ -185,10 +185,10 @@ function cat(tty) {
 				//setup fade
 				// var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:fade"), {detached: true})
 				// console.log(tty["tty"] + " was sent 'led:fade'")
-				pids.push(tty_echo["pid"])
-				tty_echo.on('close', function(){
-					cleanPID(tty_echo["pid"])
-				})
+				// pids.push(tty_echo["pid"])
+				// tty_echo.on('close', function(){
+				// 	cleanPID(tty_echo["pid"])
+				// })
 			}
 
 			else if ( string[i].length > 0 && string[i].match(/^led:/) && tty['confirmed']) {
