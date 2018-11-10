@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ $1 == "fake"]
+if [ $1 == "fake" ]
 then
 
 sudo systemctl stop systemd-timesyncd.service
