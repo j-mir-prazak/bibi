@@ -1,4 +1,4 @@
-#!/bin/#!/usr/bin/env bash
+#!/bin/bash
 if [ $1 == "fake"]
 then
 
@@ -8,6 +8,7 @@ sudo systemctl disable systemd-timesyncd.service
 sudo service systemd-timesyncd stop
 sudo service hwclock.sh stop
 date --s "14:59:45"
+
 elif [ $1 == "true" ]
 
 sudo systemctl enable systemd-timesyncd.service
