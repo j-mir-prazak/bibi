@@ -183,12 +183,14 @@ function cat(tty) {
 				clearInterval(echo_ready)
 				console.log(tty["tty"] + " is connected")
 				//setup fade
-				// var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:fade"), {detached: true})
-				// console.log(tty["tty"] + " was sent 'led:fade'")
-				// pids.push(tty_echo["pid"])
-				// tty_echo.on('close', function(){
-				// 	cleanPID(tty_echo["pid"])
-				// })
+				if ( currentState != "" ) {
+				var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:" + currentState), {detached: true})
+				console.log(tty["tty"] + " was sent 'led:" + currentState + "'")
+				pids.push(tty_echo["pid"])
+				tty_echo.on('close', function(){
+					cleanPID(tty_echo["pid"])
+					})
+				}
 			}
 
 			else if ( string[i].length > 0 && string[i].match(/^led:/) && tty['confirmed']) {
