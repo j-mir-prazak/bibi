@@ -69,8 +69,9 @@ function startCycle(version) {
 		var tty = ttys[i]
 		pids.push(cycle.player.pid)
 		if( tty["confirmed"] ) {
-			var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:fadeout"), {detached: true})
-			console.log(tty["tty"] + " was sent 'led:fadeout'")
+			var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:" + fadeInColor), {detached: true})
+			console.log(tty["tty"] + " was sent 'led:" + fadeOutColor + "'")
+			currentState = fadeOurColor
 			pids.push(tty_echo["pid"])
 			tty_echo.on('close', function(){
 				cleanPID(tty_echo["pid"])
@@ -83,8 +84,9 @@ function startCycle(version) {
 		for( tty in ttys ) {
 			var tty = ttys[tty]
 			if( tty["confirmed"] ) {
-				var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:fadein"), {detached: true})
-				console.log(tty["tty"] + " was sent 'led:fadein'")
+				var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:"+fadeInColor), {detached: true})
+				console.log(tty["tty"] + " was sent 'led:" + fadeInColor + "'")
+				currentState = fadeInColor
 				pids.push(tty_echo["pid"])
 				tty_echo.on('close', function(){
 					cleanPID(tty_echo["pid"])
@@ -120,9 +122,9 @@ function queueHandler() {
 
 var count = 0
 
-var currentState = "";
-var fadeInColor;
-var fadeOutColor;
+var currentState = ""
+var fadeInColor = "rgb:255;137;063"
+var fadeOutColor = "rgb:255;000;000"
 // var player;
 // var timeout;
 
@@ -183,15 +185,26 @@ function cat(tty) {
 				clearInterval(echo_ready)
 				console.log(tty["tty"] + " is connected")
 				//setup fade
-				if ( currentState != "" ) {
+				if ( currentState == "" ) {
+						currentState = fadeOutColor
+					}
 				var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:" + currentState), {detached: true})
 				console.log(tty["tty"] + " was sent 'led:" + currentState + "'")
 				pids.push(tty_echo["pid"])
 				tty_echo.on('close', function(){
 					cleanPID(tty_echo["pid"])
 					})
-				}
 			}
+			else	if ( string[i].length > 0 && string[i].match(/^system:stillconnected/) && ! tty["confirmed"]) {
+				var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "system:alert:reset"), {detached: true})
+				console.log(tty["tty"] + " was sent RESET")
+				pids.push(tty_echo["pid"])
+				tty_echo.on('close', function(){
+					cleanPID(tty_echo["pid"])
+					})
+
+			}
+
 
 			else if ( string[i].length > 0 && string[i].match(/^led:/) && tty['confirmed']) {
 				console.log("serial:"+string[i])
