@@ -71,7 +71,7 @@ function startCycle(version) {
 		if( tty["confirmed"] ) {
 			var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:" + fadeInColor), {detached: true})
 			console.log(tty["tty"] + " was sent 'led:" + fadeOutColor + "'")
-			currentState = fadeOurColor
+			currentState = fadeOutColor
 			pids.push(tty_echo["pid"])
 			tty_echo.on('close', function(){
 				cleanPID(tty_echo["pid"])
