@@ -45,7 +45,7 @@ function languageVersion() {
 		version = "2"
 	}
 
-	version = 1
+	// version = 1
 	return version
 
 }
@@ -64,7 +64,7 @@ function startCycle(version) {
 	var filename = "setkani." + version + ".mkv"
 	console.log(filename)
 
-	cycle["player"] = omx("/media/pi/MARATHON/" + filename, 'alsa')
+	cycle["player"] = omx("./assets/" + filename, 'alsa')
 	currentState = "fadeout"
 	for( i in ttys ) {
 		var tty = ttys[i]
