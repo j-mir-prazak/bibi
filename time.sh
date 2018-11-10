@@ -10,6 +10,7 @@ sudo service hwclock.sh stop
 date --s "14:59:45"
 
 elif [ $1 == "true" ]
+then
 
 sudo systemctl enable systemd-timesyncd.service
 sudo systemctl start systemd-timesyncd.service
