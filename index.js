@@ -120,7 +120,7 @@ function queueHandler() {
 
 var count = 0
 
-var currentState;
+var currentState = "";
 var fadeInColor;
 var fadeOutColor;
 // var player;
