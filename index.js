@@ -132,7 +132,7 @@ var rule = new schedule.RecurrenceRule()
 rule.minute = new Array(0, 15,  30, 45)
 
 var date;
-var clicker = schedule.scheduleJob("* */1 * * * *", function() {
+var clicker = schedule.scheduleJob("0 */1 * * * *", function() {
 	console.log('new cycle enqueued')
 	var version = languageVersion()
 	playerQueue.push(function() {
