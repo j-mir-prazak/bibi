@@ -31,13 +31,14 @@ function looping {
 	  echo ""
 	  echo ""
 		media=$(ls /media/pi | tail -n -1)
+		PROC2=""
 	  if [ "$media" != "" ]
 		then
 			node index.js "$media" &
+			PROC2=$!
 		else
 			echo "no flash drive"
 		fi
-		PROC2=$!
 		trap 'kill -SIGINT $PROC2; trap SIGINT; break' SIGINT
 		trap 'kill -SIGINT $PROC2; trap SIGTERM; break' SIGTERM
 		wait
