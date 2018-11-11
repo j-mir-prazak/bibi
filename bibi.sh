@@ -31,7 +31,10 @@ function looping {
 	  echo ""
 	  echo ""
 		media=$(ls /media/pi | tail -n -1)
-	  node index.js "$media" &
+	  if [ "$media" != "" ]
+		then
+			node index.js "$media" &
+		fi
 		PROC2=$!
 		trap 'kill -SIGINT $PROC2; trap SIGINT; break' SIGINT
 		trap 'kill -SIGINT $PROC2; trap SIGTERM; break' SIGTERM
