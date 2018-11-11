@@ -30,7 +30,7 @@ function looping {
 	  echo "-----------------------------"
 	  echo ""
 	  echo ""
-		media=$(/media/pi/* | tail -n -1)
+		media=$(/media/pi | tail -n -1)
 	  node index.js "$media" &
 		PROC2=$!
 		trap 'kill -SIGINT $PROC2; trap SIGINT; break' SIGINT
