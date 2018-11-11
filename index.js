@@ -8,7 +8,7 @@ var omx = require('node-omxplayer')
 
 var media = process.argv[2];
 
-console.log('flash drive name: ' + param);
+console.log('flash drive name: ' + media);
 
 //clean up
 process.on('SIGHUP',  function(){ console.log('\nCLOSING: [SIGHUP]'); process.emit("SIGINT"); })
