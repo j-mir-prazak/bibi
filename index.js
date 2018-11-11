@@ -64,7 +64,7 @@ function startCycle(version) {
 	var filename = "setkani." + version + ".mkv"
 	console.log(filename)
 
-	cycle["player"] = omx("/media/pi/*/" + filename, 'alsa')
+	cycle["player"] = omx('/media/pi/*/' + filename, 'alsa')
 	currentState = "fadeout"
 	for( i in ttys ) {
 		var tty = ttys[i]
