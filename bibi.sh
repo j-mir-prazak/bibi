@@ -34,6 +34,8 @@ function looping {
 	  if [ "$media" != "" ]
 		then
 			node index.js "$media" &
+		else
+			echo "no flash drive"
 		fi
 		PROC2=$!
 		trap 'kill -SIGINT $PROC2; trap SIGINT; break' SIGINT
