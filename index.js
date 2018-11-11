@@ -6,9 +6,9 @@ var fs = require('fs')
 var schedule = require('node-schedule')
 var omx = require('node-omxplayer')
 
-var param = process.argv[2];
+var media = process.argv[2];
 
-console.log('Param: ' + param);
+console.log('flash drive name: ' + param);
 
 //clean up
 process.on('SIGHUP',  function(){ console.log('\nCLOSING: [SIGHUP]'); process.emit("SIGINT"); })
@@ -68,7 +68,7 @@ function startCycle(version) {
 	var filename = "setkani." + version + ".mkv"
 	console.log(filename)
 
-	cycle["player"] = omx('/media/pi/*/' + filename, 'alsa')
+	cycle["player"] = omx('/media/pi/'+ media + '/' + filename, 'alsa')
 	currentState = "fadeout"
 	for( i in ttys ) {
 		var tty = ttys[i]
