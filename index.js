@@ -133,8 +133,8 @@ function queueHandler() {
 var count = 0
 
 var currentState = ""
-var fadeInColor = "rgb:094;70;117"
-var fadeOutColor = "rgb:003;004;005"
+var fadeInColor = "rgb:199;128;36"
+var fadeOutColor = "rgb:008;003;007"
 // var player;
 // var timeout;
 
