@@ -11,6 +11,7 @@ var media = process.argv[2];
 console.log('flash drive name: ' + media);
 if ( media == 'undefined' ) {
 	process.emit("SIGINT");
+	process.exit(0);
 }
 
 //clean up
