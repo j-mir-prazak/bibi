@@ -61,6 +61,7 @@ function languageVersion() {
 function startCycle(version) {
 
 	console.log("------------------  n e w  c y c l e  ------------------")
+	console.log(new Date())
 
 	var cycle = new Array();
 	var version = version || false
@@ -138,7 +139,7 @@ var fadeOutColor = "rgb:255;000;000"
 // var timeout;
 
 var rule = new schedule.RecurrenceRule()
-rule.minute = new Array(0, 15,  30, 45)
+rule.minute = new Array(0, 15, 30, 45)
 
 var date;
 var clicker = schedule.scheduleJob(rule, function() {
