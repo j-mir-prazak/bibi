@@ -4,7 +4,7 @@ var StringDecoder = require('string_decoder').StringDecoder
 var events = require('events')
 var fs = require('fs')
 var schedule = require('node-schedule')
-var omx = require('node-omxplayer')
+var omx = require('node-mplayer')
 
 var media = process.argv[2];
 
@@ -83,9 +83,9 @@ function startCycle(version) {
 			console.log(tty["tty"] + " was sent 'led:" + fadeOutColor + "'")
 			currentState = fadeOutColor
 			pids.push(tty_echo["pid"])
-			tty_echo.on('close', function(){
-				cleanPID(tty_echo["pid"])
-			})
+			tty_echo.on('close', function(pid){
+				cleanPID(pid)
+			}.bind(null, tty_echo["pid"]))
 		}
 	}
 
@@ -98,9 +98,9 @@ function startCycle(version) {
 				console.log(tty["tty"] + " was sent 'led:" + fadeInColor + "'")
 				currentState = fadeInColor
 				pids.push(tty_echo["pid"])
-				tty_echo.on('close', function(){
-					cleanPID(tty_echo["pid"])
-				})
+				tty_echo.on('close', function(pid){
+					cleanPID(pid)
+				}.bind(null, tty_echo["pid"]))
 			}
 		}
 	}, 14*60*1000)
@@ -122,11 +122,11 @@ function queueHandler() {
 	var value = playerQueue.shift()
 	var entry = value()
 	if ( typeof entry == 'object') {
-		entry["player"].on('close', function (){
+		entry["player"].on('close', function (pid){
 			console.log('playback ended')
-			cleanPID[entry.player['pid']]
+			cleanPID(pid)
 			queueHandler()
-		})
+		}.bind(null, entry.player['pid']))
 	}
 }
 
@@ -163,9 +163,9 @@ function cat(tty) {
 
 	var tty_setup = spawner.spawn("bash", new Array("./ttySetup.sh", tty["tty"]), {detached: true})
 	pids.push(tty_setup["pid"])
-	tty_setup.on('close', function(){
-		cleanPID(tty_setup["pid"])
-	})
+	tty_setup.on('close', function(pid){
+		cleanPID(pid)
+	}.bind(null, tty_setup["pid"]))
 
 	var tty_cat = spawner.spawn("bash", new Array("./ttyCat.sh", tty["tty"]), {detached: true})
 	pids.push(tty_cat["pid"])
@@ -176,9 +176,9 @@ function cat(tty) {
 		 tty_ready = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "system:ready"), {detached: true})
 		 console.log(tty["tty"] + " was sent 'system:ready'")
 		 pids.push(tty_ready["pid"])
-		 tty_ready.on('close', function(){
-			 cleanPID(tty_ready["pid"])
-		 })
+		 tty_ready.on('close', function(pid){
+			 cleanPID(pid)
+		 }.bind(null, tty_ready["pid"]))
 	}
 	echoReady()
 	var echo_ready = setInterval(function(){
@@ -201,17 +201,17 @@ function cat(tty) {
 				var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "led:" + currentState), {detached: true})
 				console.log(tty["tty"] + " was sent 'led:" + currentState + "'")
 				pids.push(tty_echo["pid"])
-				tty_echo.on('close', function(){
-					cleanPID(tty_echo["pid"])
-					})
+				tty_echo.on('close', function(pid){
+					cleanPID(pid)
+				}.bind(null, tty_echo["pid"]))
 			}
 			else	if ( string[i].length > 0 && string[i].match(/^system:stillconnected/) && ! tty["confirmed"]) {
 				var tty_echo = spawner.spawn("bash", new Array("./ttyEcho.sh", tty["tty"], "system:alert:reset"), {detached: true})
 				console.log(tty["tty"] + " was sent RESET")
 				pids.push(tty_echo["pid"])
-				tty_echo.on('close', function(){
-					cleanPID(tty_echo["pid"])
-					})
+				tty_echo.on('close', function(pid){
+					cleanPID(pid)
+				}.bind(null, tty_echo["pid"]))
 
 			}
 
@@ -227,12 +227,12 @@ function cat(tty) {
 	tty_cat.stderr.on('data', (data) => {
 	  console.log(`stderr: ${data}`)
 	})
-	tty_cat.on('close', (code) => {
-			cleanPID(tty_cat["pid"])
+	tty_cat.on('close', function (pid, code) {
+			cleanPID(pid)
 			if ( echo_ready )	clearInterval(echo_ready)
 			console.log(tty["tty"] + " was disconnected. killing dimmer on this node.")
 			delete ttys[tty["tty"]]
-		})
+		}.bind(null, tty_cat["pid"]))
 		// console.log("kill ttys")
 	return tty_cat;
 }
@@ -272,8 +272,8 @@ function ls(search) {
 		// if ( string.match(/^ls: cannot access/)) console.log(search + " not found")
 		// return false
 	});
-	ls.on('close', (code) => {
-		cleanPID(ls["pid"])
+	ls.on('close', function (pid, code) {
+		cleanPID(pid)
 		if (code == 0) {
 			for ( i in ttys ) {
 				if ( ! ttys[i]["catstarted"] ) {
@@ -286,7 +286,7 @@ function ls(search) {
 		else {
 			console.log(search + ' not to be found')
 		}
-	});
+	}.bind(null, ls["pid"]));
 	return ls;
 }
 
